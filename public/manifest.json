@@ -2,14 +2,14 @@
   "name": "FindIt - Smart Belongings Tracker",
   "short_name": "FindIt",
   "description": "Voice-first smart belongings & loan tracker. Speak where you put something, find it instantly.",
-  "start_url": "/",
+  "start_url": "/findit/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#E4EAEF",
   "theme_color": "#1A3A4A",
   "icons": [
     {
-      "src": "/assets/icon.png",
+      "src": "/findit/assets/icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
