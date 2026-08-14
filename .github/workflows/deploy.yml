@@ -34,9 +34,14 @@ jobs:
 
       - name: Export web build
         run: npx expo export --platform web
+        env:
+          NODE_ENV: production
 
       - name: Add SPA fallback for GitHub Pages
-        run: cp dist/index.html dist/404.html
+        run: |
+          if [ -f dist/index.html ]; then
+            cp dist/index.html dist/404.html
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

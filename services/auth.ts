@@ -1,12 +1,9 @@
 import { Platform } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking';
 import { supabase } from './supabase';
 
-let WebBrowser: any = null;
-let Linking: any = null;
-
 if (Platform.OS !== 'web') {
-  WebBrowser = require('expo-web-browser');
-  Linking = require('expo-linking');
   WebBrowser.maybeCompleteAuthSession();
 }
 
@@ -17,7 +14,6 @@ if (Platform.OS !== 'web') {
  */
 export async function signInWithGoogle() {
   if (Platform.OS === 'web') {
-    // On web, just redirect — Supabase handles the rest
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -30,7 +26,6 @@ export async function signInWithGoogle() {
     });
 
     if (error) throw error;
-    // On web, signInWithOAuth auto-redirects the browser
     return;
   }
 
@@ -56,7 +51,6 @@ export async function signInWithGoogle() {
     if (result.type === 'success') {
       const url = result.url;
 
-      // Tokens can be in the fragment (#) or query string (?)
       let params: URLSearchParams;
       if (url.includes('#')) {
         params = new URLSearchParams(url.split('#')[1]);
@@ -83,8 +77,7 @@ export async function signInWithGoogle() {
 
         console.log('Session set successfully, user:', sessionData.user?.email);
       } else {
-        console.error('Missing tokens in redirect. access_token:', !!accessToken, 'refresh_token:', !!refreshToken);
-        console.error('Full redirect URL:', url);
+        console.error('Missing tokens in redirect.');
       }
     }
   }

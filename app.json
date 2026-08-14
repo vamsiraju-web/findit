@@ -37,8 +37,11 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "single",
+      "output": "static",
       "favicon": "./assets/icon.png"
+    },
+    "experiments": {
+      "baseUrl": "/findit"
     },
     "plugins": [
       "expo-router",

@@ -1,14 +1,9 @@
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../constants/config';
 
-let storage: any = undefined;
-
-if (Platform.OS !== 'web') {
-  // Use AsyncStorage on native
-  const AsyncStorage = require('@react-native-async-storage/async-storage').default;
-  storage = AsyncStorage;
-}
+const storage = Platform.OS === 'web' ? undefined : AsyncStorage;
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
