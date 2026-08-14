@@ -35,6 +35,9 @@ jobs:
       - name: Export web build
         run: npx expo export --platform web
 
+      - name: Add SPA fallback for GitHub Pages
+        run: cp dist/index.html dist/404.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 

@@ -40,9 +40,6 @@
       "output": "single",
       "favicon": "./assets/icon.png"
     },
-    "experiments": {
-      "baseUrl": "/findit"
-    },
     "plugins": [
       "expo-router",
       [
