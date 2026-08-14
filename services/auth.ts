@@ -1,17 +1,42 @@
-import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
+import { Platform } from 'react-native';
 import { supabase } from './supabase';
 
-WebBrowser.maybeCompleteAuthSession();
+let WebBrowser: any = null;
+let Linking: any = null;
 
-const redirectUrl = Linking.createURL('/(tabs)');
+if (Platform.OS !== 'web') {
+  WebBrowser = require('expo-web-browser');
+  Linking = require('expo-linking');
+  WebBrowser.maybeCompleteAuthSession();
+}
 
 /**
  * Sign in with Google OAuth via Supabase.
- * Opens an in-app browser for Google authentication,
- * then handles the redirect back to the app.
+ * On native: opens an in-app browser for Google authentication.
+ * On web: redirects the page to Google OAuth.
  */
 export async function signInWithGoogle() {
+  if (Platform.OS === 'web') {
+    // On web, just redirect — Supabase handles the rest
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + window.location.pathname,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    });
+
+    if (error) throw error;
+    // On web, signInWithOAuth auto-redirects the browser
+    return;
+  }
+
+  // Native flow
+  const redirectUrl = Linking.createURL('/(tabs)');
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
